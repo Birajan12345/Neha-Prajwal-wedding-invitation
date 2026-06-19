@@ -118,7 +118,11 @@ const CouplePage = () => (
     <div className="script-heading">Two Souls, One Journey</div>
     <div className="portrait-frame">
       <div className="portrait-arch">
-        <img src={(window.__resources && window.__resources.coupleImg) || "assets/couple.jpg"} alt="Neha and Prajwal" />
+        <img
+          src={(window.__resources && window.__resources.coupleImg) || "assets/couple.jpg"}
+          alt="Neha and Prajwal"
+          onLoad={() => window.dispatchEvent(new Event('resize'))}
+        />
       </div>
     </div>
     <p className="body-text" style={{fontSize:'16px'}}>
@@ -159,7 +163,7 @@ const DetailsPage = () => (
       </div>
       <div className="detail-block">
         <div className="detail-key">TIME</div>
-        <div className="detail-val">11:00 AM onwards</div>
+        <div className="detail-val">12:00 PM &ndash; 2:00 PM</div>
       </div>
       <div className="detail-block">
         <div className="detail-key">VENUE</div>
@@ -327,6 +331,7 @@ const App = () => {
                     <div className="page-num">{i} · OF · {LAST}</div>
                   )}
                 </div>
+                <div className="page-face page-back"></div>
               </div>
             );
           })}

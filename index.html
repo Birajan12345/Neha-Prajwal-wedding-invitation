@@ -101,18 +101,15 @@
     position: absolute;
     inset: 0;
     transform-origin: left center;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    transition:
-      transform .6s cubic-bezier(.33,0,.2,1),
-      opacity .5s ease;
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+    transition: transform .95s cubic-bezier(.62,.04,.3,1);
     border-radius: 6px 14px 14px 6px;
     cursor: pointer;
-    will-change: transform, opacity;
+    will-change: transform;
   }
   .page.flipped {
-    transform: rotateY(-14deg) translateX(-5%) scale(.97);
-    opacity: 0;
+    transform: rotateY(-180deg);
     pointer-events: none;
   }
 
@@ -134,12 +131,25 @@
     padding: 30px 24px;
     text-align: center;
   }
-  /* back of a turned page */
+  /* back of a turned page (visible mid-turn) */
   .page-back {
     transform: rotateY(180deg);
-    background:
-      radial-gradient(circle at 50% 50%, rgba(201,169,110,0.07) 0%, transparent 60%),
-      linear-gradient(180deg, #faeee4 0%, #f7e9df 100%);
+    background: radial-gradient(circle at 50% 42%, #fdf6f0 0%, #f7e9df 68%, #f1ddd0 100%);
+  }
+  .page-back::before {
+    content: '';
+    position: absolute;
+    inset: 14px;
+    border: 1px solid rgba(201,169,110,0.45);
+    border-radius: 4px;
+    pointer-events: none;
+  }
+  .page-back::after {
+    content: 'N \2665 P';
+    font-family: 'Pinyon Script', cursive;
+    font-size: 38px;
+    letter-spacing: 2px;
+    color: rgba(168,82,103,0.42);
   }
 
   /* content wrapper that auto-fits inside the frame */
@@ -437,6 +447,8 @@
     border-radius: 50% 50% 8px 8px / 35% 35% 8px 8px;
     overflow: hidden;
     background: var(--blush);
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
     box-shadow:
       0 14px 30px -12px rgba(91,35,52,0.45),
       inset 0 0 0 5px var(--cream),
@@ -448,6 +460,8 @@
     object-fit: cover;
     object-position: center 20%;
     display: block;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     filter: saturate(1.1) contrast(1.02);
   }
   .portrait-arch::after {
