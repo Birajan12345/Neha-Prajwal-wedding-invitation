@@ -268,10 +268,10 @@ const App = () => {
 
   // Auto-fit: scale each page's content so it always sits inside the frame,
   // no matter the screen height. Full size on roomy screens; gently scales
-  // down only when the viewport is short. Runs once (not per page) and only
-  // writes the transform when it actually changes — re-fitting on every page
-  // change (and on image load) was forcing iOS Safari to re-rasterize the
-  // couple photo, causing a visible flicker.
+  // down only when the viewport is short. Uses CSS zoom (reflow) rather than
+  // transform: scale — a scale transform on .page-content, nested inside the
+  // rotating 3D page, forces iOS Safari/Messenger to re-rasterize that layer
+  // mid-turn and flicker.
   useLayoutEffect(() => {
     let raf = null;
     const fit = () => {
@@ -279,13 +279,14 @@ const App = () => {
         if (face.classList.contains('cover-face')) return;
         const content = face.querySelector('.page-content');
         if (!content) return;
+        content.style.zoom = '1';
+        content.style.transform = '';
         const cs = getComputedStyle(face);
         const padV = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
         const avail = face.clientHeight - padV - 6;
         const natural = content.scrollHeight;
-        const scale = natural > avail ? Math.max(0.62, avail / natural) : 1;
-        const value = scale < 1 ? `scale(${scale})` : '';
-        if (content.style.transform !== value) content.style.transform = value;
+        const z = natural > avail ? Math.max(0.62, avail / natural) : 1;
+        content.style.zoom = z < 1 ? String(z) : '';
       });
     };
     const schedule = () => {
