@@ -127,7 +127,8 @@ const CouplePage = () => (
         <img
           src={(window.__resources && window.__resources.coupleImg) || "assets/couple.jpg"}
           alt="Neha and Prajwal"
-          onLoad={() => window.dispatchEvent(new Event('resize'))}
+          decoding="async"
+          fetchpriority="high"
         />
       </div>
     </div>
@@ -243,30 +244,49 @@ const App = () => {
     setTimeout(hide, 2600); // safety cap if fonts stall
   }, []);
 
+  // Preload + decode the couple photo up front so it's already rasterized
+  // by the time the user reaches page 2.
+  useEffect(() => {
+    const img = new Image();
+    img.src = (window.__resources && window.__resources.coupleImg) || 'assets/couple.jpg';
+    img.decode().catch(() => {});
+  }, []);
+
   // Auto-fit: scale each page's content so it always sits inside the frame,
   // no matter the screen height. Full size on roomy screens; gently scales
-  // down only when the viewport is short.
+  // down only when the viewport is short. Runs once (not per page) and only
+  // writes the transform when it actually changes — re-fitting on every page
+  // change (and on image load) was forcing iOS Safari to re-rasterize the
+  // couple photo, causing a visible flicker.
   useLayoutEffect(() => {
+    let raf = null;
     const fit = () => {
       document.querySelectorAll('.page-face').forEach((face) => {
         if (face.classList.contains('cover-face')) return;
         const content = face.querySelector('.page-content');
         if (!content) return;
-        content.style.transform = 'none';
         const cs = getComputedStyle(face);
         const padV = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
         const avail = face.clientHeight - padV - 6;
         const natural = content.scrollHeight;
         const scale = natural > avail ? Math.max(0.62, avail / natural) : 1;
-        content.style.transform = scale < 1 ? `scale(${scale})` : '';
+        const value = scale < 1 ? `scale(${scale})` : '';
+        if (content.style.transform !== value) content.style.transform = value;
       });
     };
-    fit();
-    window.addEventListener('resize', fit);
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
-    const t = setTimeout(fit, 320);
-    return () => { window.removeEventListener('resize', fit); clearTimeout(t); };
-  }, [page]);
+    const schedule = () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(fit);
+    };
+    schedule();
+    window.addEventListener('resize', schedule);
+    window.addEventListener('orientationchange', schedule);
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+      window.removeEventListener('resize', schedule);
+      window.removeEventListener('orientationchange', schedule);
+    };
+  }, []);
 
   const next = useCallback(() => setPage(p => Math.min(LAST, p + 1)), []);
   const prev = useCallback(() => setPage(p => Math.max(0, p - 1)), []);
