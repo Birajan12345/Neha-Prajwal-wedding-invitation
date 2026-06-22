@@ -140,7 +140,7 @@ const CouplePage = () => (
 );
 
 const CountdownPage = () => {
-  const target = useMemo(() => new Date('2026-06-27T11:00:00').getTime(), []);
+  const target = useMemo(() => new Date('2026-06-27T12:00:00').getTime(), []);
   const { days, hours, minutes, seconds } = useBookCountdown(target);
   const pad = (n) => String(n).padStart(2, '0');
   return (
@@ -330,7 +330,6 @@ const App = () => {
         <div className="book" data-screen-label={PAGES[page].label}>
           <div className="book-base"></div>
           {PAGES.map((p, i) => {
-            const flipped = i < page || (p.id === 'cover' && page > 0);
             const isCover = p.id === 'cover';
             const near = Math.abs(i - page) <= 1;
             return (
