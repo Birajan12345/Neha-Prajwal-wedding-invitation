@@ -3,7 +3,7 @@
 An animated single-page digital wedding invitation (book format).
 
 - **Couple:** Neha & Prajwal
-- **Date:** Saturday, 27 June 2026 (Ashar 13, 2083 B.S.), 11:00 AM
+- **Date:** Saturday, 27 June 2026 (Ashar 13, 2083 B.S.), 12:00 PM – 2:00 PM
 - **Venue:** Yala Durbar, Sankhamul, Lalitpur
 
 ## Files

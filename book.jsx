@@ -94,7 +94,7 @@ const CoverPage = ({ onOpen }) => (
       onClick={(e) => { e.stopPropagation(); onOpen(); }}
       aria-label="Open the invitation book"
     >
-      N<span style={{fontSize:'17px', margin:'0 2px'}}>♥</span>P
+      <span className="seal-mark">N<span className="seal-heart">♥</span>P</span>
     </button>
     <div className="cover-open-label">TAP THE SEAL TO OPEN</div>
   </>

@@ -277,38 +277,6 @@
     animation: nudge 1.8s ease-in-out infinite;
   }
 
-  /* Cover date block (light text on wine cover) */
-  .cover-date-day {
-    font-family: 'Cormorant SC', serif;
-    font-size: 14px;
-    letter-spacing: 0.4em;
-    color: var(--gold-light);
-    margin-top: 2px;
-  }
-  .cover-date-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 400;
-    font-size: 50px;
-    line-height: 1;
-    color: #f3e3c2;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    margin: 4px 0;
-  }
-  .cover-date-bs {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 16px;
-    color: var(--gold-light);
-    margin-top: 8px;
-  }
-  .cover-date-time {
-    font-family: 'Cormorant SC', serif;
-    font-size: 15px;
-    letter-spacing: 0.3em;
-    color: #f3e3c2;
-    margin-top: 8px;
-    padding-top: 8px;
-  }
   @keyframes nudge {
     0%, 100% { transform: translateY(0); opacity: 0.75; }
     50%      { transform: translateY(-3px); opacity: 1; }
@@ -328,9 +296,10 @@
       inset 0 4px 6px rgba(255,255,255,0.2);
     display: grid;
     place-items: center;
-    font-family: 'Pinyon Script', cursive;
+    line-height: 1;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     color: #f5d4d4;
-    font-size: 30px;
+    font-size: 34px;
     text-shadow: 0 1px 2px rgba(0,0,0,0.3);
     margin: 18px auto 0;
     animation: sealPulse 1.8s ease-in-out infinite;
@@ -338,6 +307,23 @@
     cursor: pointer;
   }
   .cover-seal { margin: 14px auto 6px; }
+
+  /* N ♥ P monogram — elegant serif caps, evenly spaced, no swash overlap.
+     Flex-centered both axes so it sits dead-center in the wax circle. */
+  .seal-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    line-height: 1;
+    font-weight: 600;
+    letter-spacing: 0;
+    transform: translateY(-0.02em);
+  }
+  .seal-heart {
+    font-size: 0.62em;
+    transform: translateY(0.02em);
+  }
 
   .wax-seal::before {
     content: '';
